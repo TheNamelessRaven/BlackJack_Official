@@ -14,9 +14,10 @@ import android.widget.Toast;
 import java.util.Random;
 
 public class MainActivity extends Activity{
+
     Button rules,more,enough,difficulty;
     TextView player,aiscore;
-    int p1,ai;
+    int p1,ai,range,max=21,min=16;
     Integer game_difficulty=1;
     Boolean fail=false,stop=false;
 
@@ -25,6 +26,8 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+
+
         p1 = 0;
         Random rnd = new Random();
         boolean end=false;
@@ -45,8 +48,6 @@ public class MainActivity extends Activity{
                     if (p1 >= 22) {
                         more.setEnabled(false);
                         endgame();
-
-
                     }
                     else{
                         more.setEnabled(true);
@@ -61,12 +62,27 @@ public class MainActivity extends Activity{
             @Override
             public void onClick(View view) {
                 game_difficulty();
+                enough.setEnabled(false);
+                more.setEnabled(false);
+                if(ai<21||p1<21){
+                    if(ai<p1){
+                        player.setText("Játékos nyert");
+                        endgame();
+                    }
+                    else{
+                        player.setText("Gép nyert!");
+                        endgame();
+                    }
+                }
+                else{
+                    player.setText("Túlhaladás (Egyik fél sem nyert!)");
+                    endgame();
+                }
             }
         });
         rules.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Toast.makeText(MainActivity.this, "Az nyer aki közelebb lesz a 21-es értékhez", Toast.LENGTH_SHORT).show();
             }
         });
@@ -111,17 +127,18 @@ public class MainActivity extends Activity{
         public void game_difficulty(){
             switch (game_difficulty){
                 case(0):{
-                    ai=(int)(Math.random()*20)+0;
+                    ai=(int)(Math.random()*21-1)+14;
                     aiscore.setText(String.valueOf(ai));
                     break;
                 }
                 case(1):{
-                    ai=(int)(Math.random()*21-8)+15;
+                    Random rnd=new Random();
+                    ai=rnd.nextInt(21)+1;
                     aiscore.setText(String.valueOf(ai));
                     break;
                 }
                 case(2):{
-                    ai=(int)(Math.random()*21)+0;
+                    ai=(int)(Math.random()*21-1)+18;
                     aiscore.setText(String.valueOf(ai));
                     break;
 
